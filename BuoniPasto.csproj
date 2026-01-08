@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>BuoniPasto</AssemblyName>
+
+    <Nullable>enable</Nullable>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+
+    <!-- RIDs che usi per publish -->
+    <RuntimeIdentifiers>osx-arm64;win-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <!-- Proprietà specifiche di Windows -->
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <ApplicationIcon>Assets/AppIcon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.*" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.*" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.*" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.*" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.*" />
+
+    <!-- Rimuove Avalonia.Diagnostics dall'output Release -->
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.*">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
+    <PackageReference Include="itext7" Version="9.*" />
+
+    <!-- Override per evitare NU1903 (Newtonsoft.Json 9.0.1 transitivo) -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.*" />
+  </ItemGroup>
+
+</Project>

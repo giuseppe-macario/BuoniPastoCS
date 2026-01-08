@@ -1,0 +1,121 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:BuoniPastoGui.ViewModels"
+        mc:Ignorable="d"
+        x:Class="BuoniPastoGui.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="980"
+        Height="680"
+        Title="Buoni Pasto (PDF)">
+
+  <!--
+    Righe:
+    0 = Toolbar
+    1 = Drop Zone
+    2 = PDF selezionato
+    3 = Totali
+    4 = Risultati
+  -->
+  <Grid RowDefinitions="Auto,Auto,Auto,Auto,*"
+        Margin="14"
+        RowSpacing="10">
+
+    <!-- ================= Toolbar ================= -->
+    <StackPanel Grid.Row="0"
+                Orientation="Horizontal"
+                Spacing="10">
+      <Button Content="Seleziona PDF" Click="SelectFile_Click" />
+      <Button Content="Analizza" Click="Analyze_Click" />
+      <Button Content="Pulisci" Click="Clear_Click" />
+      <TextBlock Text="{Binding Status}"
+                 VerticalAlignment="Center"
+                 Margin="12,0,0,0"/>
+    </StackPanel>
+
+    <!-- ================= Drop Zone ================= -->
+    <Border Grid.Row="1"
+            Name="DropZone"
+            DragDrop.AllowDrop="True"
+            BorderThickness="2"
+            CornerRadius="10"
+            Padding="14"
+            HorizontalAlignment="Stretch">
+      <StackPanel HorizontalAlignment="Center" Spacing="6">
+        <TextBlock Text="Trascina qui il PDF"
+                   FontSize="16"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"/>
+        <TextBlock Text="(oppure usa “Seleziona PDF”)"
+                   Opacity="0.8"
+                   HorizontalAlignment="Center"/>
+      </StackPanel>
+    </Border>
+
+    <!-- ================= PDF selezionato ================= -->
+    <Border Grid.Row="2"
+            BorderThickness="1"
+            CornerRadius="8"
+            Padding="10">
+      <StackPanel Spacing="8">
+        <TextBlock Text="PDF selezionato"
+                   FontWeight="Bold"
+                   FontSize="16"/>
+        <ListBox ItemsSource="{Binding Files}" />
+      </StackPanel>
+    </Border>
+
+    <!-- ================= Totali ================= -->
+    <StackPanel Grid.Row="3"
+                Orientation="Horizontal"
+                Spacing="18">
+      <TextBlock Text="Totale Buoni Pranzo:"
+                 FontWeight="Bold"/>
+      <TextBlock Text="{Binding TotPranzo}"/>
+      <TextBlock Text="Totale Buoni Cena:"
+                 FontWeight="Bold"
+                 Margin="18,0,0,0"/>
+      <TextBlock Text="{Binding TotCena}"/>
+    </StackPanel>
+
+    <!-- ================= Risultati ================= -->
+    <Border Grid.Row="4"
+            BorderThickness="1"
+            CornerRadius="8"
+            Padding="10">
+      <Grid RowDefinitions="Auto,*"
+            RowSpacing="8">
+
+        <TextBlock Grid.Row="0"
+                   Text="Risultati"
+                   FontWeight="Bold"
+                   FontSize="16"/>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Risultati}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Data"
+                                Binding="{Binding Data, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                Width="1.2*"/>
+            <DataGridTextColumn Header="Giorno"
+                                Binding="{Binding Data, StringFormat='{}{0:dddd}'}"
+                                Width="1*"/>
+            <DataGridTextColumn Header="Uscita"
+                                Binding="{Binding Uscita, StringFormat='{}{0:hh\\:mm}'}"
+                                Width="1*"/>
+            <DataGridTextColumn Header="Tipo"
+                                Binding="{Binding Tipo}"
+                                Width="1*"/>
+          </DataGrid.Columns>
+        </DataGrid>
+
+      </Grid>
+    </Border>
+
+  </Grid>
+</Window>

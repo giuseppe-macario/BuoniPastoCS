@@ -1,0 +1,24 @@
+Creare le icone per macOS
+-------------------------
+Partendo da un PNG quadrato con risoluzione 1024×1024 (per es. AppIcon.png nella cartella Assets):
+
+mkdir -p AppIcon.iconset
+sips -z 16 16     Assets/AppIcon.png --out AppIcon.iconset/icon_16x16.png
+sips -z 32 32     Assets/AppIcon.png --out AppIcon.iconset/icon_16x16@2x.png
+sips -z 32 32     Assets/AppIcon.png --out AppIcon.iconset/icon_32x32.png
+sips -z 64 64     Assets/AppIcon.png --out AppIcon.iconset/icon_32x32@2x.png
+sips -z 128 128   Assets/AppIcon.png --out AppIcon.iconset/icon_128x128.png
+sips -z 256 256   Assets/AppIcon.png --out AppIcon.iconset/icon_128x128@2x.png
+sips -z 256 256   Assets/AppIcon.png --out AppIcon.iconset/icon_256x256.png
+sips -z 512 512   Assets/AppIcon.png --out AppIcon.iconset/icon_256x256@2x.png
+sips -z 512 512   Assets/AppIcon.png --out AppIcon.iconset/icon_512x512.png
+sips -z 1024 1024 Assets/AppIcon.png --out AppIcon.iconset/icon_512x512@2x.png
+iconutil -c icns AppIcon.iconset -o AppIcon.icns
+rm -r AppIcon.iconset
+
+
+Creare le icone per Windows
+---------------------------
+
+brew install imagemagick
+magick Assets/AppIcon.png -define icon:auto-resize=256,128,64,48,32,16 Assets/AppIcon.ico
