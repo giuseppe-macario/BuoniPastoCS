@@ -1,32 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>BuoniPasto</AssemblyName>
 
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 
-    <!-- RIDs che usi per publish -->
     <RuntimeIdentifiers>osx-arm64;win-x64</RuntimeIdentifiers>
+    
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
-  <!-- Proprietà specifiche di Windows -->
   <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
     <ApplicationIcon>Assets/AppIcon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
-  <!-- Crea un .app per macOS -->
-  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">
+  <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('osx-'))">
     <UseAppHost>true</UseAppHost>
     <EnableMacOSAppHost>true</EnableMacOSAppHost>
-  </PropertyGroup>
+    </PropertyGroup>
   
   <ItemGroup>
     <Folder Include="Models\" />
-    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Assets/**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,17 +37,12 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.*" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.*" />
 
-    <!-- Rimuove Avalonia.Diagnostics dall'output Release -->
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.*">
-      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.*" Condition="'$(Configuration)' == 'Debug'" />
 
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
     <PackageReference Include="itext7" Version="9.*" />
 
-    <!-- Override per evitare NU1903 (Newtonsoft.Json 9.0.1 transitivo) -->
-    <PackageReference Include="Newtonsoft.Json" Version="13.*" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>
