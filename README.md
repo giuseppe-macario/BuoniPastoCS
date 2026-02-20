@@ -55,6 +55,13 @@ cp AppIcon.icns "BuoniPasto.app/Contents/Resources/AppIcon.icns"
 Accertarsi che il file `Info.plst` sia già presente nel progetto. \
 Accertarsi che `BuoniPasto.app/Contents/MacOS/BuoniPasto` abbia il permesso `+x`.
 
+### Avviso per l'app compilata su GitHub
+
+Se macOS si rifiuta di eseguire l'app visualizzando un avviso di file insicuro oppure danneggiato, sbloccare Gatekeeper:
+```
+xattr -cr /path/BuoniPasto.app
+```
+
 ## Compilazione per Windows
 
 Per impostare l'icona dell'app su Windows, seguire le istruzioni nel file `Help-icone.txt`.
