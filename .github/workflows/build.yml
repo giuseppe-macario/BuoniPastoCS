@@ -30,7 +30,9 @@ jobs:
           dotnet publish \
             -c Release \
             -r osx-arm64 \
-            --self-contained true
+            --self-contained true \
+            /p:PublishSingleFile=true \
+            /p:IncludeNativeLibrariesForSelfExtract=true
 
       # =========================
       # Publish Windows (x64)
@@ -41,32 +43,23 @@ jobs:
             -c Release \
             -r win-x64 \
             --self-contained true \
-            /p:PublishSingleFile=false
+            /p:PublishSingleFile=true \
+            /p:IncludeNativeLibrariesForSelfExtract=true
 
       # =========================
-      # ZIP outputs
+      # Upload macOS executable
       # =========================
-      - name: Create ZIP macOS (publish folder)
-        run: |
-          cd bin/Release/net*/osx-arm64
-          zip -r BuoniPasto-macOS-arm64.zip publish
-
-      - name: Create ZIP Windows (publish folder)
-        run: |
-          cd bin/Release/net*/win-x64
-          zip -r BuoniPasto-Windows-x64.zip publish
-
-      # =========================
-      # Upload ZIP artifacts
-      # =========================
-      - name: Upload macOS ZIP artifact
+      - name: Upload macOS executable
         uses: actions/upload-artifact@v4
         with:
-          name: BuoniPasto-macOS-arm64-zip
-          path: bin/Release/net*/osx-arm64/BuoniPasto-macOS-arm64.zip
+          name: BuoniPasto-macOS-arm64
+          path: bin/Release/net*/osx-arm64/publish/BuoniPasto
 
-      - name: Upload Windows ZIP artifact
+      # =========================
+      # Upload Windows executable
+      # =========================
+      - name: Upload Windows executable
         uses: actions/upload-artifact@v4
         with:
-          name: BuoniPasto-Windows-x64-zip
-          path: bin/Release/net*/win-x64/BuoniPasto-Windows-x64.zip
+          name: BuoniPasto-Windows-x64
+          path: bin/Release/net*/win-x64/publish/BuoniPasto.exe
