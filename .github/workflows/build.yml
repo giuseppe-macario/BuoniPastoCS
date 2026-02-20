@@ -32,7 +32,8 @@ jobs:
             -r osx-arm64 \
             --self-contained true \
             /p:PublishSingleFile=true \
-            /p:IncludeNativeLibrariesForSelfExtract=true
+            /p:IncludeNativeLibrariesForSelfExtract=true \
+            -o output/osx-arm64
 
       # =========================
       # Publish Windows (x64)
@@ -44,7 +45,8 @@ jobs:
             -r win-x64 \
             --self-contained true \
             /p:PublishSingleFile=true \
-            /p:IncludeNativeLibrariesForSelfExtract=true
+            /p:IncludeNativeLibrariesForSelfExtract=true \
+            -o output/win-x64
 
       # =========================
       # Upload macOS executable
@@ -53,7 +55,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: BuoniPasto-macOS-arm64
-          path: bin/Release/net*/osx-arm64/publish/BuoniPasto
+          path: output/osx-arm64/BuoniPasto
 
       # =========================
       # Upload Windows executable
@@ -62,4 +64,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: BuoniPasto-Windows-x64
-          path: bin/Release/net*/win-x64/publish/BuoniPasto.exe
+          path: output/win-x64/BuoniPasto.exe
