@@ -36,30 +36,32 @@ jobs:
             /p:UseAppHost=true \
             -o output/osx-arm64
 
-            - name: Create macOS app bundle
-            run: |
-            mkdir -p output/osx-arm64/BuoniPasto.app/Contents/MacOS
-            mkdir -p output/osx-arm64/BuoniPasto.app/Contents/Resources
-            
-            cp output/osx-arm64/BuoniPasto output/osx-arm64/BuoniPasto.app/Contents/MacOS/
-            cat > output/osx-arm64/BuoniPasto.app/Contents/Info.plist <<EOF
-            <?xml version="1.0" encoding="UTF-8"?>
-            <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-            <plist version="1.0">
-            <dict>
-              <key>CFBundleName</key>
-              <string>BuoniPasto</string>
-              <key>CFBundleExecutable</key>
-              <string>BuoniPasto</string>
-              <key>CFBundleIdentifier</key>
-              <string>com.tuonome.buonipasto</string>
-              <key>CFBundleVersion</key>
-              <string>1.0.0</string>
-              <key>CFBundlePackageType</key>
-              <string>APPL</string>
-            </dict>
-            </plist>
-            EOF
+      - name: Create macOS app bundle
+        run: |
+          mkdir -p output/osx-arm64/BuoniPasto.app/Contents/MacOS
+          mkdir -p output/osx-arm64/BuoniPasto.app/Contents/Resources
+
+          cp output/osx-arm64/BuoniPasto \
+             output/osx-arm64/BuoniPasto.app/Contents/MacOS/
+
+          cat > output/osx-arm64/BuoniPasto.app/Contents/Info.plist <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleName</key>
+            <string>BuoniPasto</string>
+            <key>CFBundleExecutable</key>
+            <string>BuoniPasto</string>
+            <key>CFBundleIdentifier</key>
+            <string>com.tuonome.buonipasto</string>
+            <key>CFBundleVersion</key>
+            <string>1.0.0</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+          </dict>
+          </plist>
+          EOF
 
       # =========================
       # Publish Windows (x64)
