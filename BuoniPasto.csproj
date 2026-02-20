@@ -18,6 +18,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
+  <!-- Crea un .app per macOS -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">
+    <UseAppHost>true</UseAppHost>
+    <EnableMacOSAppHost>true</EnableMacOSAppHost>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
