@@ -38,13 +38,15 @@ jobs:
 
       - name: Create macOS app bundle
         run: |
-          mkdir -p output/osx-arm64/BuoniPasto.app/Contents/MacOS
-          mkdir -p output/osx-arm64/BuoniPasto.app/Contents/Resources
-
-          cp output/osx-arm64/BuoniPasto \
-             output/osx-arm64/BuoniPasto.app/Contents/MacOS/
-
-          cat > output/osx-arm64/BuoniPasto.app/Contents/Info.plist <<EOF
+          mkdir -p final-app/BuoniPasto.app/Contents/MacOS
+          mkdir -p final-app/BuoniPasto.app/Contents/Resources
+          
+          cp output/osx-arm64/BuoniPasto final-app/BuoniPasto.app/Contents/MacOS/
+          
+          chmod +x final-app/BuoniPasto.app/Contents/MacOS/BuoniPasto
+          
+          # 4. Crea Info.plist
+          cat > final-app/BuoniPasto.app/Contents/Info.plist <<EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
@@ -59,9 +61,17 @@ jobs:
             <string>1.0.0</string>
             <key>CFBundlePackageType</key>
             <string>APPL</string>
+            <key>LSMinimumSystemVersion</key>
+            <string>11.0</string>
           </dict>
           </plist>
           EOF
+
+      - name: Upload macOS app bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: BuoniPasto-macOS-arm64
+          path: final-app/BuoniPasto.app
 
       # =========================
       # Publish Windows (x64)
