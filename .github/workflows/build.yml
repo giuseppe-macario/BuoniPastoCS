@@ -8,19 +8,28 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      # =========================
+      # Checkout
+      # =========================
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # =========================
+      # Setup .NET
+      # =========================
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
 
+      # =========================
+      # Restore & Build
+      # =========================
       - name: Restore
         run: dotnet restore
 
-      - name: Build (verifica compilazione)
-        run: dotnet build -c Release
+      - name: Build (Release)
+        run: dotnet build -c Release --no-restore
 
       # =========================
       # Publish macOS (ARM64)
@@ -33,22 +42,25 @@ jobs:
             --self-contained true \
             /p:PublishSingleFile=true \
             /p:IncludeNativeLibrariesForSelfExtract=true \
-            /p:UseAppHost=true \
             -o output/osx-arm64
 
+      # =========================
+      # Create macOS .app bundle
+      # =========================
       - name: Create macOS app bundle
         run: |
-          mkdir -p final-app/BuoniPasto.app/Contents/MacOS
-          mkdir -p final-app/BuoniPasto.app/Contents/Resources
-          
-          cp output/osx-arm64/BuoniPasto final-app/BuoniPasto.app/Contents/MacOS/
-          
-          chmod +x final-app/BuoniPasto.app/Contents/MacOS/BuoniPasto
-          
-          # 4. Crea Info.plist
-          cat > final-app/BuoniPasto.app/Contents/Info.plist <<EOF
+          mkdir -p output/osx-arm64/BuoniPasto.app/Contents/MacOS
+          mkdir -p output/osx-arm64/BuoniPasto.app/Contents/Resources
+
+          cp output/osx-arm64/BuoniPasto \
+             output/osx-arm64/BuoniPasto.app/Contents/MacOS/
+
+          chmod +x output/osx-arm64/BuoniPasto.app/Contents/MacOS/BuoniPasto
+
+          cat > output/osx-arm64/BuoniPasto.app/Contents/Info.plist <<EOF
           <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+           "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
             <key>CFBundleName</key>
@@ -56,22 +68,26 @@ jobs:
             <key>CFBundleExecutable</key>
             <string>BuoniPasto</string>
             <key>CFBundleIdentifier</key>
-            <string>com.tuonome.buonipasto</string>
+            <string>com.giuseppe.buonipasto</string>
             <key>CFBundleVersion</key>
             <string>1.0.0</string>
             <key>CFBundlePackageType</key>
             <string>APPL</string>
             <key>LSMinimumSystemVersion</key>
-            <string>11.0</string>
+            <string>13.0</string>
           </dict>
           </plist>
           EOF
 
-      - name: Upload macOS app bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: BuoniPasto-macOS-arm64
-          path: final-app/BuoniPasto.app
+      # =========================
+      # Zip macOS bundle (Apple-safe)
+      # =========================
+      - name: Zip macOS app bundle
+        run: |
+          cd output/osx-arm64
+          ditto -c -k --sequesterRsrc --keepParent \
+            BuoniPasto.app \
+            BuoniPasto-macOS-arm64.zip
 
       # =========================
       # Publish Windows (x64)
@@ -87,18 +103,18 @@ jobs:
             -o output/win-x64
 
       # =========================
-      # Upload macOS app
+      # Upload macOS artifact
       # =========================
-      - name: Upload macOS app bundle
+      - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
           name: BuoniPasto-macOS-arm64
-          path: output/osx-arm64/BuoniPasto.app/
+          path: output/osx-arm64/BuoniPasto-macOS-arm64.zip
 
       # =========================
-      # Upload Windows executable
+      # Upload Windows artifact
       # =========================
-      - name: Upload Windows executable
+      - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
           name: BuoniPasto-Windows-x64
