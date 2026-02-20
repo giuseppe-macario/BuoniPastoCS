@@ -83,7 +83,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: BuoniPasto-macOS-arm64
-          path: output/osx-arm64/BuoniPasto.app
+          path: output/osx-arm64/BuoniPasto.app/
 
       # =========================
       # Upload Windows executable
